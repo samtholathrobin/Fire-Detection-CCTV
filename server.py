@@ -13,26 +13,23 @@ async def transmit(websocket1, path):
     print("Client Connected !")
     await websocket1.send("Connection Established")
     try :
-        cap = cv2.VideoCapture("http://192.168.101.138:8080")
-
+        cap = cv2.VideoCapture("<Video Stream Link>")
+        
         while cap.isOpened():
+            d="0"
             _, frame = cap.read()
-            results = model.predict(frame, stream=True)
+            results = model.predict(frame, stream=False)
             for i in results:
-                a=i.names[i.boxes.cls[0].item()]
-                print(a)
-            
+                if len(i.boxes)>1:
+                    a=i.names[i.boxes.cls[0].item()]
+                    if a=="Fire":
+                        d="1"
+                    elif a=="Smoke":
+                        d="2"
             encoded = cv2.imencode('.jpg', frame)[1]
-
             data = str(base64.b64encode(encoded))
-            data = data[2:len(data)-1]
-            
-            await websocket1.send(data)
-
-            if a=="Fire":
-                print("Alarm On")
-            else:
-                print("Alarm Off")
+            d+=data[2:len(data)-1]
+            await websocket1.send(d)
 
         cap.release()
 
