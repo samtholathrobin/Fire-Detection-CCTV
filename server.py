@@ -2,18 +2,23 @@ import websockets
 import asyncio
 import cv2, base64
 from ultralytics import YOLO
+import socket
+from fastapi import FastAPI
+from typing import Union
+import uvicorn
 
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
 model=YOLO("fire_detektor.pt")
-
 port = 5000
-
-print("Started server on port : ", port)
+websocket_link="ws://"+IPAddr+":"+str(port)
 
 async def transmit(websocket1, path):
     print("Client Connected !")
     await websocket1.send("Connection Established")
     try :
-        cap = cv2.VideoCapture("<Video Stream Link>")
+
+        cap = cv2.VideoCapture(<Video Stream Link>)
         
         while cap.isOpened():
             d="0"
@@ -37,7 +42,12 @@ async def transmit(websocket1, path):
         print("Client Disconnected !")
         cap.release()
 
-start_server = websockets.serve(transmit, host="192.168.56.1", port=port)
+start_server = websockets.serve(transmit, host=IPAddr, port=port)
+print("Ready to Connect")
+app=FastAPI()
+@app.get("/")
+async def read_root():
+    return {"websocket": websocket_link}
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
