@@ -18,14 +18,6 @@ The images from the video stream are then converted into base64 encoding and the
 
 The Flutter app receives this data, decodes it, and presents the video stream and the result of the object detection model through its visually striking UI. The application also has an alarm feature which is activated during the course of a fire.
 
-## Code Implementation
-[Include code snippets or link to code files here if available]
-
-## Working of Object Detection Model
-[Add details about the object detection model's working]
-
-## Mobile Application
-[Provide details about the mobile application and its features]
 
 ## Future Optimizations
 - **Cloud Hosting:** Hosting this server on the cloud would allow us to support multiple CCTVs, creating a more varied workspace that can be used by multiple CCTVs or users. This would enhance the robustness and compliance of the application.
